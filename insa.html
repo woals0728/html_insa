@@ -240,58 +240,55 @@
                 </div>
               </div>
             </div>
-            <div id="lay2" class="tabcontent">
-              <a
-                class="right btn-floating btn-large waves-effect waves-light red"
-                onclick="remove_div(this)"
-                ><i class="material-icons">remove</i></a
-              >
-              <a
-                class="right btn-floating btn-large waves-effect waves-light red"
-                onclick="add_div()"
-                ><i class="material-icons">add</i></a
-              >
-              &nbsp;&nbsp;
-              <blockquote>가족사항</blockquote>
-              <div class="row" id="family">
-                
-                <div class="input-field col s3">
-                  <select>
-                    <option value="" disabled selected>관계</option>
-                    <option value="1">부</option>
-                    <option value="2">모</option>
-                    <option value="3">형</option>
-                    <option value="4">제</option>
-                    <option value="5">자</option>
-                    <option value="6">매</option>
-                  </select>
-                </div>
-                <div class="input-field col s4">
-                  <input id="f_name" type="text" class="validate" />
-                  <label for="f_name">*성명</label>
-                </div>
-                <div class="input-field col s4">
-                  <label for="f_rel">*동거여부</label>
-                  <div class="right switch">
-                    <label>
-                      아니오
-                      <input type="checkbox" />
-                      <span class="lever"></span>
-                      예
-                    </label>
+            <form name="family" action="" method="POST">
+              <input type="hidden" name="count" value="0" />
+              <div id="lay2" class="tabcontent">
+                <a
+                  class="right btn-floating btn-large waves-effect waves-light red"
+                  onclick="remove_div()"
+                  ><i class="material-icons">remove</i></a
+                >
+                <a
+                  class="right btn-floating btn-large waves-effect waves-light red"
+                  onclick="add_div()"
+                  ><i class="material-icons">add</i></a
+                >
+                <blockquote>가족사항</blockquote>
+                <div class="row" id="family_room">
+                  <div class="input-field col s3">
+                    <select>
+                      <option value="" disabled selected>관계</option>
+                      <option value="1">부</option>
+                      <option value="2">모</option>
+                      <option value="3">형</option>
+                      <option value="4">제</option>
+                      <option value="5">자</option>
+                      <option value="6">매</option>
+                    </select>
+                  </div>
+                  <div class="input-field col s4">
+                    <input id="f_name" type="text" class="validate" />
+                    <label for="f_name">*성명</label>
+                  </div>
+                  <div class="input-field col s4">
+                    <label for="f_rel">*동거여부</label>
+                    <div class="right switch">
+                      <label>
+                        아니오
+                        <input type="checkbox" />
+                        <span class="lever"></span>
+                        예
+                      </label>
+                    </div>
+                  </div>
+                  <div class="input-field col s7">
+                    <input id="f_birth" type="text" class="datepicker" />
+                    <label for="f_birth">*생년월일</label>
                   </div>
                 </div>
-                <div class="input-field col s7">
-                  <input id="f_birth" type="text" class="datepicker" />
-                  <label for="f_birth">*생년월일</label>
-                </div>
-                
+                <div id="field"></div>
               </div>
-              <div class="row" id="field">
-                
-              </div>
-            </div>
-
+            </form>
             <div id="lay3" class="tabcontent">
               <blockquote>학력사항</blockquote>
               <div class="row">
@@ -431,20 +428,68 @@
       </div>
     </div>
   </body>
+
   <script>
     window.onload = function () {
       M.AutoInit();
       openCity(null, "lay1");
     };
 
+    var count = 0;
+
     function add_div() {
-      var div = document.createElement("div");
-      div.innerHTML = document.getElementById("family").innerHTML;
-      document.getElementById("field").appendChild(div);
+      var field = document.getElementById("field");
+
+      var newDiv =
+        '<div class="row">\n\
+                  <div class="input-field col s3">\n\
+                    <select>\n\
+                      <option value="" disabled selected>관계</option>\n\
+                      <option value="1">부</option>\n\
+                      <option value="2">모</option>\n\
+                      <option value="3">형</option>\n\
+                      <option value="4">제</option>\n\
+                      <option value="5">자</option>\n\
+                      <option value="6">매</option>\n\
+                    </select>\n\
+                  </div>\n\
+                  <div class="input-field col s4">\n\
+                    <input id="f_name" type="text" class="validate" />\n\
+                    <label for="f_name">*성명</label>\n\
+                  </div>\n\
+                  <div class="input-field col s4">\n\
+                    <label for="f_rel">*동거여부</label>\n\
+                    <div class="right switch">\n\
+                      <label>\n\
+                        아니오\n\
+                        <input type="checkbox" />\n\
+                        <span class="lever"></span>\n\
+                        예\n\
+                      </label>\n\
+                    </div>\n\
+                  </div>\n\
+                  <div class="input-field col s7">\n\
+                    <input id="f_birth" type="text" class="datepicker" />\n\
+                    <label for="f_birth">*생년월일</label>\n\
+                  </div>\n\
+                </div>';
+
+      var addedDiv = document.createElement("div");
+      addedDiv.id = "added_" + count;
+      addedDiv.innerHTML = newDiv;
+      field.appendChild(addedDiv);
+
+      count++;
+      document.family.count.value = count;
     }
 
-    function remove_div(obj) {
-      document.getElementById("field").removeChild(obj.parentNode);
+    function remove_div() {
+      var field = document.getElementById("field");
+
+      if (count > 0) {
+        var addedDiv = document.getElementById("added_" + --count);
+        field.removeChild(addedDiv);
+      }
     }
 
     function openCity(evt, cityName) {
